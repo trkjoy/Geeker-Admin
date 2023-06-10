@@ -16,6 +16,8 @@ import "element-plus/theme-chalk/dark/css-vars.css";
 import "@/styles/theme/element-dark.scss";
 // custom element css
 import "@/styles/element.scss";
+//SliderVerify css
+import "slider-verify-v3/lib/SliderVerify.css";
 // svg icons
 import "virtual:svg-icons-register";
 // element plus
@@ -32,6 +34,8 @@ import I18n from "@/languages/index";
 import pinia from "@/stores";
 // errorHandler
 import errorHandler from "@/utils/errorHandler";
+//SliderVerify
+import SliderVerify from "slider-verify-v3";
 
 const app = createApp(App);
 
@@ -42,4 +46,4 @@ Object.keys(Icons).forEach(key => {
   app.component(key, Icons[key as keyof typeof Icons]);
 });
 
-app.use(ElementPlus).use(directives).use(router).use(I18n).use(pinia).mount("#app");
+app.use(ElementPlus).use(directives).use(router).use(I18n).use(pinia).use(SliderVerify).mount("#app");

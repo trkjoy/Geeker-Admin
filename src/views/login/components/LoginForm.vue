@@ -25,6 +25,26 @@
       登录
     </el-button>
   </div>
+  <div class="verify-btn" v-if="showVerify">
+    <SliderVerify
+      :img-url="sliderVConf.imgUrl"
+      :s-text="sliderVConf.sText"
+      :e-text="sliderVConf.eText"
+      v-model:isShowSelf="sliderVConf.isShowSelf"
+      :is-border="sliderVConf.isBorder"
+      :is-parent-node="sliderVConf.isParentNode"
+      :is-close-btn="sliderVConf.isCloseBtn"
+      :is-reload-btn="sliderVConf.isReloadBtn"
+      :width="sliderVConf.width"
+      :height="sliderVConf.height"
+      @reload="emitChange('reload')"
+      @show="emitChange('show')"
+      @hide="emitChange('hide')"
+      @close="emitChange('close')"
+      @success="emitChange('success')"
+      @fail="emitChange('fail')"
+    ></SliderVerify>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -49,24 +69,48 @@ const tabsStore = useTabsStore();
 const keepAliveStore = useKeepAliveStore();
 
 type FormInstance = InstanceType<typeof ElForm>;
+const loading = ref(false);
+const showVerify = ref(false);
 const loginFormRef = ref<FormInstance>();
 const loginRules = reactive({
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   password: [{ required: true, message: "请输入密码", trigger: "blur" }]
 });
 
-const loading = ref(false);
 const loginForm = reactive<Login.ReqLoginForm>({
   username: "",
   password: ""
 });
 
+const sliderVConf = reactive<Login.SliderVerify>({
+  isShowSelf: true,
+  width: 400,
+  height: 180,
+  imgUrl: "",
+  sText: "验证成功",
+  eText: "验证失败",
+  isBorder: false,
+  isCloseBtn: true,
+  isReloadBtn: true,
+  isParentNode: false
+});
 // login
 const login = (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   formEl.validate(async valid => {
     if (!valid) return;
-    loading.value = true;
+    showVerify.value = true;
+  });
+};
+
+// resetForm
+const resetForm = (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
+  formEl.resetFields();
+};
+
+const emitChange = async (type: string) => {
+  if (type == "success") {
     try {
       // 1.执行登录接口
       const { data } = await loginApi({ ...loginForm, password: md5(loginForm.password) });
@@ -90,13 +134,18 @@ const login = (formEl: FormInstance | undefined) => {
     } finally {
       loading.value = false;
     }
-  });
-};
+    return;
+  }
 
-// resetForm
-const resetForm = (formEl: FormInstance | undefined) => {
-  if (!formEl) return;
-  formEl.resetFields();
+  if (type == "close") {
+    showVerify.value = false;
+    return;
+  }
+
+  ElNotification({
+    title: "xxxxx",
+    message: type
+  });
 };
 
 onMounted(() => {

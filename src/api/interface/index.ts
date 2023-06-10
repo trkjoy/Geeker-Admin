@@ -42,6 +42,18 @@ export namespace Login {
   export interface ResAuthButtons {
     [key: string]: string[];
   }
+  export interface SliderVerify {
+    isShowSelf: Boolean;
+    width: number;
+    height: number;
+    imgUrl: string;
+    sText: string;
+    eText: string;
+    isBorder: Boolean;
+    isCloseBtn: Boolean;
+    isReloadBtn: Boolean;
+    isParentNode: Boolean;
+  }
 }
 
 // 用户管理模块
