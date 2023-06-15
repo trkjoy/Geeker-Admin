@@ -1,4 +1,5 @@
 <template>
+  <div v-waterMarker="{ text: copyright, textColor: 'rgba(180, 180, 180, 0.5)' }" class="water-marker-box"></div>
   <el-config-provider :locale="locale" :size="assemblySize" :button="buttonConfig">
     <router-view></router-view>
   </el-config-provider>
@@ -12,11 +13,16 @@ import { useTheme } from "@/hooks/useTheme";
 import { ElConfigProvider } from "element-plus";
 import { LanguageType } from "./stores/interface";
 import { useGlobalStore } from "@/stores/modules/global";
-
+import { useUserStore } from "@/stores/modules/user";
 import en from "element-plus/es/locale/lang/en";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 
 const globalStore = useGlobalStore();
+const userStore = useUserStore();
+
+const copyright = computed(() => {
+  return "~~~(" + userStore.userInfo.name + ")~~~";
+});
 
 // init theme
 const { initTheme } = useTheme();
@@ -43,3 +49,16 @@ const assemblySize = computed(() => globalStore.assemblySize);
 // element button config
 const buttonConfig = reactive({ autoInsertSpace: false });
 </script>
+<style scoped lang="scss">
+.water-marker-box {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  // z-index: 100;
+  width: 100%;
+  height: 100%;
+
+  // background-color: red;
+}
+</style>
