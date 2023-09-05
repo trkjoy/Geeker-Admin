@@ -54,11 +54,10 @@ const buttonConfig = reactive({ autoInsertSpace: false });
   position: fixed;
   top: 0;
   left: 0;
-
-  // z-index: 100;
+  z-index: 99999;
+  display: block;
   width: 100%;
   height: 100%;
-
-  // background-color: red;
+  pointer-events: none;
 }
 </style>
